@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+
+# import libs are created by miniedit.
+
 from mininet.net import Mininet
 from mininet.node import Controller, RemoteController, OVSController
 from mininet.node import CPULimitedHost, Host, Node
@@ -15,16 +18,19 @@ from mininet.topo import Topo
 
 def myNetwork():
 
+    # Creating an empty network using full network addresses. This is only an example. 
     net = Mininet( topo=None,
                    build=False,
                    ipBase='0.0.0.0/0')
 
+    #Local default controller.
     info( '*** Adding controller\n' )
     c0=net.addController(name='c0',
                       controller=Controller,
                       protocol='tcp',
                       port=6633)
 
+    # Add namespaces, put switches before routers to avoid an error.
     info( '*** Add switches\n')
     s6 = net.addSwitch('s6')
     s5 = net.addSwitch('s5')
@@ -40,6 +46,7 @@ def myNetwork():
     s8 = net.addSwitch('s8', cls=OVSKernelSwitch)
     s7 = net.addSwitch('s7', cls=OVSKernelSwitch)
 
+    # hosts part, specify the ip addresses and defaultRoute here.
     info( '*** Add hosts\n')
     h1 = net.addHost('h1', cls=Host, ip='12.12.12.1', defaultRoute='via 12.12.12.254')
     h4 = net.addHost('h4', cls=Host, ip='13.13.13.2', defaultRoute='via 13.13.13.254')
@@ -50,7 +57,7 @@ def myNetwork():
     h7 = net.addHost('h7', cls=Host, ip='10.10.10.2', defaultRoute='via 10.10.10.254')
     h6 = net.addHost('h6', cls=Host, ip='11.11.11.1', defaultRoute='via 11.11.11.254')
 
-
+    # linking components, specify some of the interfaces in-used.
     info( '*** Add links\n')
     net.addLink(r1, r2, intfName1='r1-eth3', intfName2='r2-eth1')
     net.addLink(r1, r3, intfName1='r1-eth2', intfName2='r3-eth2')
@@ -71,6 +78,7 @@ def myNetwork():
     net.addLink(s6, h3)
     net.addLink(s6, h4)
 
+    # Starting everything.
     info( '*** Starting network\n')
     net.build()
     info( '*** Starting controllers\n')
@@ -80,7 +88,7 @@ def myNetwork():
     info( '*** Starting switches\n')
     net.start()
 
-
+    # Configuring interfaces on the routers.
     info('****** Configuire Routers\n')
     r1.cmdPrint('ifconfig r1-eth0 12.12.12.254 netmask 255.255.255.0')
     r1.cmdPrint('ifconfig r1-eth1 1.1.1.1 netmask 255.255.255.0')
@@ -102,6 +110,7 @@ def myNetwork():
     r4.cmdPrint('ifconfig r4-eth2 1.1.1.2 netmask 255.255.255.0')
     r4.cmdPrint('ifconfig r4-eth3 5.5.5.1 netmask 255.255.255.0')
 
+    # Configuring routing function. For this stage, we use static routes. So there is a lot of them.
     info('****** Configuire Routings\n')
     r1.cmdPrint('route add -net 10.10.10.0/24 gw 1.1.1.2')
     r1.cmdPrint('route add -net 11.11.11.0/24 gw 2.2.2.2')
@@ -132,7 +141,7 @@ def myNetwork():
     r4.cmdPrint('route add -net 6.6.6.0/24 gw 3.3.3.1')
 
 
-
+    # start CLI for mininet.
     info( '*** Post configure switches and hosts\n')
     CLI(net)
     net.stop()
