@@ -1,7 +1,9 @@
 # PythonInMininet
-Practise of python coding, working in Mininet enviornment
+Practise of python coding, working in Mininet enviornment, Ryu controller.
 
-This very first practise of me will use mininet to creat a network with four full-meshed routers
-and each one connected to one switch, each switch conneced with 2 hosts.
+A 3-floor office campus network design. Using mininet to build the SDN solution for this project.
 
-To controll this network, a built-in mininet controller will do the job. All routers will be configured manually at this stage.
+Around 200 end points with multiple MLS as the distribution layer. Two routers as the internet gateway.
+
+Ryu controller is used in this project to enable routing, firewall, and monitoring function.
+
